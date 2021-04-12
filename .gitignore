@@ -1,0 +1,6 @@
+dataset
+datasetdata.json
+red.jpg
+*.pdf
+.idea
+__pycache__
