@@ -4,3 +4,5 @@ red.jpg
 *.pdf
 .idea
 __pycache__
+test_1.py
+test.py

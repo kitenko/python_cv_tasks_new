@@ -1,13 +1,28 @@
-import os
 import numpy as np
 import cv2
-import random
-import json
+import os
+
+#image_final = np.zeros((10, 10, 3), np.uint8)
+
+#image = np.random.randint(0, 255, (10, 10, 1))
+#image_zeros = np.zeros((10, 10, 1), np.uint8)
+#image_2 = np.zeros((10, 10, 1), np.uint8)
+
+#ter = np.concatenate((image_zeros, image_zeros, image), axis=-1)
+#print(ter)
+#color = tuple(reversed(ter))
+
+#image_final[:] = color
+#image_final = image_final[:, :, ::-1]
+#print(image_final)
+
+#print(ter)
+#cv2.imwrite('red2.jpg', ter)
 
 
-"""Я пытлася реализовать чтобы пути папок были доступтны везде, но global так и не помог. Из-за этого мне необходимо
-прописовать пути отдельно в виде констант, как ты и говорил. Но есть ли возможность сделать, что бы мои переменные были
- достурты из вложанной функции? """
+
+"""print(image)
+print(image_1)"""
 
 
 path_dataset = "dataset"
@@ -17,14 +32,7 @@ path_green = path_dataset + "/green"
 
 
 def create_dataset(path: str, number_of_images=100, width_image=(100, 300), height_image=(100, 300), colour=''):
-
     def create_directory(path: str):
-
-        # оставил для примера
-
-        #global path_red
-        #global path_blue
-        #global path_green
 
         path_red = path + "/red"
         path_blue = path + "/blue"
@@ -82,56 +90,4 @@ def create_dataset(path: str, number_of_images=100, width_image=(100, 300), heig
             cv2.imwrite('green_' + str(i) + '.jpg', final_image)
 
 
-#create_dataset(path="dataset", number_of_images=100, colour='green', width_image=(300, 500), height_image=(300, 500))
-
-
-def make_data_json(path_dataset: str, path_json=path_dataset, test_image=10):
-
-    # directory list
-    red_catalog = os.listdir(path_red)
-    green_catalog = os.listdir(path_green)
-    blue_catalog = os.listdir(path_blue)
-
-
-    # number of test images
-    len_test_red = int(((len(red_catalog)/100) * test_image))
-    len_test_green = int(((len(green_catalog)/100) * test_image))
-    len_test_blue = int(((len(blue_catalog)/100) * test_image))
-
-    # create dictionary
-    fail_slov = {"train" : {
-
-            },
-            "test" : {
-
-            }
-                 }
-
-    # shuffling directories before distribution
-    random.shuffle(red_catalog)
-    random.shuffle(green_catalog)
-    random.shuffle(blue_catalog)
-
-        # creating a complete dictionary
-    for i in range(len(red_catalog)):
-        if i < len_test_red:
-            fail_slov["test"][path_red + red_catalog[i]] = "red"
-        else:
-            fail_slov["train"][path_red + red_catalog[i]] = "red"
-
-    for i in range(len(green_catalog)):
-        if i < len_test_green:
-            fail_slov["test"][path_green + green_catalog[i]] = "green"
-        else:
-            fail_slov["train"][path_green + green_catalog[i]] = "green"
-
-    for i in range(len(blue_catalog)):
-        if i < len_test_blue:
-            fail_slov["test"][path_blue + blue_catalog[i]] = "blue"
-        else:
-            fail_slov["train"][path_blue + blue_catalog[i]] = "blue"
-
-    with open(path_json + 'data.json', 'w', encoding='utf-8') as f:
-        json.dump(fail_slov, f, ensure_ascii=False, indent=4)
-
-#make_data_json(path_dataset, test_image=20)
+create_dataset(path="dataset", number_of_images=100, colour='green', width_image=(300, 500), height_image=(300, 500))
