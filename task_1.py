@@ -5,21 +5,17 @@ from typing import Tuple
 import numpy as np
 import cv2
 
-DATASET_PATH = os.path.join('dataset_image')
-DATASET_PATH_RED = os.path.join(DATASET_PATH, 'red_image')
-DATASET_PATH_BLUE = os.path.join(DATASET_PATH, 'blue_image')
-DATASET_PATH_GREEN = os.path.join(DATASET_PATH, 'green_image')
-ALL_PATH = [DATASET_PATH_RED, DATASET_PATH_GREEN, DATASET_PATH_BLUE]
+from config import DATASET_PATH_BLUE, DATASET_PATH_GREEN, DATASET_PATH_RED, ALL_PATH
 
 
-def create_dataset(number_of_images: int, image_wight_range: Tuple[int, int], image_height_range: Tuple[int, int]) -> None:
+def create_dataset(number_of_images: int, image_wight_range: Tuple[int, int], image_height_range: Tuple[int, int]) \
+        -> None:
     """
     This function create dataset of images (red, green, blue)
 
     :param number_of_images: number of images for one color in folder.
     :param image_wight_range: the wight of the image changes within the specified range.
     :param image_height_range: the height of the image changes within the specified range.
-    :param colour: which color of image you want to create.
     """
     # create folders for images
     for i in ALL_PATH:
@@ -57,32 +53,25 @@ def make_data_json(proportion_test_images: float) -> None:
     blue_catalog = os.listdir(DATASET_PATH_BLUE)
 
     # number of test images
-    len_test_red = int(len(red_catalog) * proportion_test_images)
-    len_test_green = int(len(green_catalog) * proportion_test_images)
-    len_test_blue = int(len(blue_catalog) * proportion_test_images)
+    len_test_images = int(len(red_catalog + green_catalog + blue_catalog) * proportion_test_images)
 
     # create dictionary
     train_test_image_json = {'train': {}, 'test': {}}
 
-    # creating a complete dictionary
-    for i, img_path in enumerate(red_catalog):
-        if i < len_test_red:
-            train_test_image_json['test'][os.path.join(DATASET_PATH_RED, img_path)] = 'red'
-        else:
-            train_test_image_json['train'][os.path.join(DATASET_PATH_RED, img_path)] = 'red'
+    # create zip object
+    path_name_label_zip = zip([DATASET_PATH_RED, DATASET_PATH_GREEN, DATASET_PATH_BLUE],
+                              [red_catalog, green_catalog, blue_catalog],
+                              ['red', 'green', 'blue'])
 
-    for i, img_path in enumerate(green_catalog):
-        if i < len_test_green:
-            train_test_image_json['test'][os.path.join(DATASET_PATH_GREEN, img_path)] = 'green'
-        else:
-            train_test_image_json['train'][os.path.join(DATASET_PATH_GREEN, img_path)] = 'green'
+    # create full dict for json file
+    for path_data, name_image, label in path_name_label_zip:
+        for n in range(len(list(name_image))):
+            if n < (len_test_images//3):
+                train_test_image_json['test'][os.path.join(path_data, name_image[n])] = label
+            else:
+                train_test_image_json['train'][os.path.join(path_data, name_image[n])] = label
 
-    for i, img_path in enumerate(blue_catalog):
-        if i < len_test_blue:
-            train_test_image_json['test'][os.path.join(DATASET_PATH_BLUE, img_path)] = 'blue'
-        else:
-            train_test_image_json['train'][os.path.join(DATASET_PATH_BLUE, img_path)] = 'blue'
-
+    # write json file
     with open(os.path.join('data.json'), 'w') as f:
         json.dump(train_test_image_json, f, indent=4)
 
