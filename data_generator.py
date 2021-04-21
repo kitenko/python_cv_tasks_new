@@ -16,11 +16,11 @@ class DataGenerator(keras.utils.Sequence):
                  image_shape: Tuple[int, int, int] = (224, 224, 3), num_classes: int = 5,
                  class_names: Tuple[str, str, str, str, str] = CLASS_NAMES) -> None:
         """
-        This function reads parameters, reads json and shuffles the data.
+        Data generator for the task colour classifying.
 
         :param json_path: this is path for json file
         :param batch_size: number of images in one batch
-        :param is_train: this is bool value, if is_train = True, then we work with train images, otherwise with test.
+        :param is_train: if is_train = True, then we work with train images, otherwise with test.
         :param image_shape: this is image shape (height, width, channels)
         """
         self.batch_size = batch_size

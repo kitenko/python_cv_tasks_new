@@ -7,6 +7,7 @@ from keras.layers import Dense, Conv2D, BatchNormalization, GlobalAveragePooling
 
 from config import INPUT_SHAPE
 
+
 class Model(keras.models.Model):
     def __init__(self, input_shape: Tuple[int, int, int], num_classes: int, regularization: Optional[float],
                  activation_type: str, input_name: str) -> None:
@@ -18,7 +19,7 @@ class Model(keras.models.Model):
         :param activation_type: Mish
         :param input_name: name of the input tensor
         """
-        self.input_shape = input_shape
+        self._input_shape = input_shape
         self.num_classes = num_classes
         self.activation_type = activation_type
         self.input_name = input_name
@@ -34,7 +35,7 @@ class Model(keras.models.Model):
             Building CNN model for classification task.
             :return: keras.model.Model() object.
             """
-            inputs = Input(shape=self.input_shape, name=self.input_name)
+            inputs = Input(shape=self._input_shape, name=self.input_name)
             x = BatchNormalization()(inputs)
             # block 1
             x = Conv2D(filters=32, kernel_size=(3, 3), strides=2, padding="same", kernel_regularizer=self.ker_reg)(x)
@@ -55,8 +56,3 @@ class Model(keras.models.Model):
 
 
 r = Model(input_shape=INPUT_SHAPE, num_classes=5, regularization=None, input_name='Privet', activation_type='Mish')
-
-
-
-
-
