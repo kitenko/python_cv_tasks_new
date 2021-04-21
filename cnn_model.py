@@ -1,9 +1,9 @@
 import math
 from typing import Tuple, Optional
 
-import keras
+from tensorflow import keras
 from keras.utils.generic_utils import get_custom_objects
-from keras.layers import Dense, Conv2D, BatchNormalization, GlobalAveragePooling2D, Input, Activation
+from tensorflow.keras.layers import Dense, Conv2D, BatchNormalization, GlobalAveragePooling2D, Input, Activation
 
 from config import INPUT_SHAPE
 
@@ -52,7 +52,8 @@ class Model(keras.models.Model):
             # Dense
             x = GlobalAveragePooling2D()(x)
             x = Dense(self.num_classes, kernel_regularizer=self.ker_reg, activation='softmax')(x)
-            return x
+            model = keras.Model(inputs=inputs, outputs=x)
+            return model
 
 
 r = Model(input_shape=INPUT_SHAPE, num_classes=5, regularization=None, input_name='Privet', activation_type='Mish')

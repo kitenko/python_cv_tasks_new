@@ -6,11 +6,11 @@ import numpy as np
 import cv2
 
 from config import DATASET_PATH_BLUE, DATASET_PATH_GREEN, DATASET_PATH_RED, DATASET_PATH_GRAY, DATASET_PATH_COLOUR, \
-                   JSON_FILE_PATH
+                   JSON_FILE_PATH, NUMBER_OF_CLASSES
 
 
 def create_dataset(number_of_images: int, image_wight_range: Tuple[int, int], image_height_range: Tuple[int, int],
-                   number_of_classec: int = 5) -> None:
+                   number_of_classec: int = NUMBER_OF_CLASSES) -> None:
     """
     This function create dataset of images (red, green, blue)
 
@@ -51,8 +51,8 @@ def create_dataset(number_of_images: int, image_wight_range: Tuple[int, int], im
             cv2.imwrite(os.path.join(DATASET_PATH_COLOUR, 'colour_{}.jpg'.format(i)), final_image)
 
 
-def make_data_json(path_for_json: str = JSON_FILE_PATH, proportion_test_images: float = 0.2, number_of_classes: int = 5) \
-                   -> None:
+def make_data_json(path_for_json: str = JSON_FILE_PATH, proportion_test_images: float = 0.2,
+                   number_of_classes: int = NUMBER_OF_CLASSES) -> None:
     """
     This function creates json file with train and test data of images.
 

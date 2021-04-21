@@ -8,12 +8,12 @@ import keras
 import numpy as np
 import matplotlib.pyplot as plt
 
-from config import JSON_FILE_PATH, CLASS_NAMES
+from config import JSON_FILE_PATH, CLASS_NAMES, NUMBER_OF_CLASSES, BATCH_SIZE
 
 
 class DataGenerator(keras.utils.Sequence):
-    def __init__(self, json_path: str = JSON_FILE_PATH, batch_size: int = 16, is_train: bool = True,
-                 image_shape: Tuple[int, int, int] = (224, 224, 3), num_classes: int = 5,
+    def __init__(self, json_path: str = JSON_FILE_PATH, batch_size: int = BATCH_SIZE, is_train: bool = True,
+                 image_shape: Tuple[int, int, int] = (224, 224, 3), num_classes: int = NUMBER_OF_CLASSES,
                  class_names: Tuple[str, str, str, str, str] = CLASS_NAMES) -> None:
         """
         Data generator for the task colour classifying.
@@ -129,5 +129,4 @@ def image_normalization(image: np.ndarray) -> np.ndarray:
     return image / 255.0
 
 
-x = DataGenerator(json_path=JSON_FILE_PATH, batch_size=16, is_train=False, image_shape=(224, 224, 3))
-x.show(1)
+#x = DataGenerator(json_path=JSON_FILE_PATH, batch_size=16, is_train=False, image_shape=(224, 224, 3))
