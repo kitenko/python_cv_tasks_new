@@ -18,10 +18,12 @@ class DataGenerator(keras.utils.Sequence):
         """
         Data generator for the task colour classifying.
 
-        :param json_path: this is path for json file
-        :param batch_size: number of images in one batch
+        :param json_path: this is path for json file.
+        :param batch_size: number of images in one batch.
         :param is_train: if is_train = True, then we work with train images, otherwise with test.
-        :param image_shape: this is image shape (height, width, channels)
+        :param image_shape: this is image shape (height, width, channels).
+        :param num_classes: number of image classes.
+        :param class_names: label names, for example: "red", "green".
         """
         self.batch_size = batch_size
         self.is_train = is_train
@@ -88,7 +90,7 @@ class DataGenerator(keras.utils.Sequence):
 
     def show(self, batch_idx: int) -> None:
         """
-        This method showing image with lable
+        This method showing image with lable.
 
         :param batch_idx: batch number.
         """

@@ -4,30 +4,31 @@ import os
 from typing import Tuple
 
 import cv2
-import numpy as np
 import matplotlib
+import numpy as np
 import matplotlib.pyplot as plt
 
-from config import JSON_FILE_PATH
+from config import JSON_FILE_PATH, NUMBER_OF_CLASSES
 
 matplotlib.use('TkAgg')
 
 
 class DataGenerator:
     def __init__(self, json_path: str, batch_size: int = 16, is_train: bool = True,
-                 image_shape: Tuple[int, int, int] = (224, 224, 3)) -> None:
+                 image_shape: Tuple[int, int, int] = (224, 224, 3), number_of_classes: int = NUMBER_OF_CLASSES) -> None:
         """
-        This function reads parameters, reads json and shuffles the data.
+        Data generator for the task colour classifying.
 
-        :param json_path: this is path for json file
-        :param batch_size: number of images in one batch
-        :param is_train: this is bool value, if is_train = True, then we work with train images, otherwise with test.
-        :param image_shape: this is image shape (height, width, channels)
+        :param json_path: this is path for json file.
+        :param batch_size: number of images in one batch.
+        :param is_train: if is_train = True, then we work with train images, otherwise with test.
+        :param image_shape: this is input image shape (height, width, channels).
+        :param number_of_classes: number of image classes.
         """
         self.batch_size = batch_size
         self.is_train = is_train
         self.image_shape = image_shape
-        self.num_classes = 3
+        self.num_classes = number_of_classes
 
         # read json
         with open(os.path.join(json_path)) as f:  # открыли файл с данными
@@ -48,10 +49,6 @@ class DataGenerator:
         return self
 
     def __next__(self) -> Tuple[np.ndarray, np.ndarray]:
-        """
-
-        :return:
-        """
         if self.counter < len(self):
             self.counter += 1
             return self[self.counter - 1]
@@ -61,9 +58,9 @@ class DataGenerator:
 
     def __len__(self) -> int:
         """
-        This function counts numbers of batch
+        This function counts numbers of batch.
 
-        :return: number_of_batch
+        :return: number_of_batch.
         """
         number_of_batch = math.ceil(len(self.data) / self.batch_size)
         return number_of_batch
@@ -86,7 +83,6 @@ class DataGenerator:
 
             if class_name == 'red':
                 labels[i, 0] = 1
-
             elif class_name == 'green':
                 labels[i, 1] = 1
             elif class_name == 'blue':
