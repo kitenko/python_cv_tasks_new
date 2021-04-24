@@ -1,11 +1,8 @@
-import math
 from typing import Tuple, Optional
 
 import tensorflow as tf
 from tensorflow import keras
 from tensorflow.keras.layers import Dense, Conv2D, BatchNormalization, GlobalAveragePooling2D, Input, Activation
-
-from config import INPUT_SHAPE
 
 
 class My_Mega_Model():

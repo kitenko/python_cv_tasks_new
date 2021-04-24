@@ -8,6 +8,7 @@ import keras
 import numpy as np
 import matplotlib.pyplot as plt
 
+
 from config import JSON_FILE_PATH, CLASS_NAMES, NUMBER_OF_CLASSES, BATCH_SIZE
 
 
@@ -37,8 +38,10 @@ class DataGenerator(keras.utils.Sequence):
 
         if is_train:
             self.data = self.data['train']
+
         else:
             self.data = self.data['test']
+
 
         self.data = list(self.data.items())
         np.random.shuffle(self.data)
@@ -83,7 +86,7 @@ class DataGenerator(keras.utils.Sequence):
                 labels[i, 4] = 1
             else:
                 raise ValueError('no label for image')
-        #images = image_normalization(images)
+        images = image_normalization(images)
         return images, labels
 
     def show(self, batch_idx: int) -> None:
