@@ -23,8 +23,8 @@ def train(dataset_path_json: str, save_path: str) -> None:
     train_data_gen = data_generator.DataGenerator(dataset_path_json, is_train=True)
     test_data_gen = data_generator.DataGenerator(dataset_path_json, is_train=False)
 
-    model = cnn_model.Model(input_shape=INPUT_SHAPE, num_classes=NUMBER_OF_CLASSES, activation_type='Mish',
-                            input_name='Model', regularization=0.0005)
+    model = cnn_model.My_Mega_Model(input_shape=INPUT_SHAPE, num_classes=NUMBER_OF_CLASSES, activation_type='Mish',
+                                    input_name='Model', regularization=0.0005).build()
     model.compile(loss=keras.losses.categorical_crossentropy, optimizer=keras.optimizers.Adam(LEARNING_RATE),
                   metrics=['accuracy'])
     model.summary()

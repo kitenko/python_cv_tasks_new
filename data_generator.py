@@ -70,9 +70,7 @@ class DataGenerator(keras.utils.Sequence):
             img = cv2.imread(img_path)
             img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
             resized_image = cv2.resize(img, (self.image_shape[1], self.image_shape[0]))
-            resized_image = self.aug(resized_image)
             images[i, :, :, :] = resized_image
-
             if class_name == 'red':
                 labels[i, 0] = 1
             elif class_name == 'green':
@@ -85,7 +83,7 @@ class DataGenerator(keras.utils.Sequence):
                 labels[i, 4] = 1
             else:
                 raise ValueError('no label for image')
-
+        #images = image_normalization(images)
         return images, labels
 
     def show(self, batch_idx: int) -> None:
