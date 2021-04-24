@@ -8,7 +8,6 @@ import keras
 import numpy as np
 import matplotlib.pyplot as plt
 
-
 from config import JSON_FILE_PATH, CLASS_NAMES, NUMBER_OF_CLASSES, BATCH_SIZE
 
 
@@ -42,7 +41,6 @@ class DataGenerator(keras.utils.Sequence):
         else:
             self.data = self.data['test']
 
-
         self.data = list(self.data.items())
         np.random.shuffle(self.data)
         self.counter = 0
@@ -63,7 +61,7 @@ class DataGenerator(keras.utils.Sequence):
         Here we return batch (numpy array(batch_size, image_h, image_w, 3). Also we return "onehot encoding", where
         there are batch_size and number of classes.
 
-        :param batch_idx:
+        :param batch_idx: batch number.
         :return: image tensor and list with labels tensors for each output.
         """
         batch = self.data[(batch_idx * self.batch_size):((batch_idx + 1) * self.batch_size)]
