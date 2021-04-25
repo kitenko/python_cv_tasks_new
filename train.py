@@ -5,6 +5,7 @@ from tensorflow.keras.callbacks import EarlyStopping
 
 from data_generator import DataGenerator
 from cnn_model import ClassificationGeneratedImages
+from metrics import Metric
 from config import NUMBER_OF_CLASSES, LOGS_DIR, INPUT_SHAPE, LEARNING_RATE, EPOCHS, JSON_FILE_PATH
 
 
@@ -38,7 +39,7 @@ def train(dataset_path_json: str, save_path: str) -> None:
     )
     model.fit_generator(generator=train_data_gen, validation_data=test_data_gen, validation_freq=1,
                         validation_steps=len(test_data_gen), epochs=EPOCHS,
-                        callbacks=[model_checkpoint_callback, early], workers=4)
+                        callbacks=[model_checkpoint_callback, early], workers=8)
 
 
 if __name__ == '__main__':
