@@ -16,7 +16,7 @@ class DataGenerator(keras.utils.Sequence):
                  image_shape: Tuple[int, int, int] = (224, 224, 3), num_classes: int = NUMBER_OF_CLASSES,
                  class_names: Tuple[str, str, str, str, str] = CLASS_NAMES) -> None:
         """
-        Data generator for the task colour classifying.
+        Data generator for the task of colour images classifying.
 
         :param json_path: this is path for json file.
         :param batch_size: number of images in one batch.
@@ -32,34 +32,31 @@ class DataGenerator(keras.utils.Sequence):
         self.class_names = class_names
 
         # read json
-        with open(os.path.join(json_path)) as f:  # открыли файл с данными
+        with open(json_path) as f:
             self.data = json.load(f)
 
         if is_train:
             self.data = self.data['train']
-
         else:
             self.data = self.data['test']
 
         self.data = list(self.data.items())
-        np.random.shuffle(self.data)
         self.counter = 0
         self.on_epoch_end()
 
     def on_epoch_end(self) -> None:
         """
-        Random shuffling of training data at the end of each epoch.
+        Random shuffling of data at the end of each epoch.
+
         """
-        if self.is_train:
-            np.random.shuffle(self.data)
+        np.random.shuffle(self.data)
 
     def __len__(self) -> int:
         return len(self.data) // self.batch_size + (len(self.data) % self.batch_size != 0)
 
     def __getitem__(self, batch_idx: int) -> Tuple[np.ndarray, np.ndarray]:
         """
-        Here we return batch (numpy array(batch_size, image_h, image_w, 3). Also we return "onehot encoding", where
-        there are batch_size and number of classes.
+        This function makes batch.
 
         :param batch_idx: batch number.
         :return: image tensor and list with labels tensors for each output.
@@ -89,7 +86,7 @@ class DataGenerator(keras.utils.Sequence):
 
     def show(self, batch_idx: int) -> None:
         """
-        This method showing image with lable.
+        This method showing image with label.
 
         :param batch_idx: batch number.
         """
@@ -128,6 +125,3 @@ def image_normalization(image: np.ndarray) -> np.ndarray:
     :return: normalized image.
     """
     return image / 255.0
-
-
-#x = DataGenerator(json_path=JSON_FILE_PATH, batch_size=16, is_train=False, image_shape=(224, 224, 3))
