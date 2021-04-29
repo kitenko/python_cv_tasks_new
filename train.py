@@ -4,8 +4,8 @@ import tensorflow as tf
 from tensorflow.keras.callbacks import EarlyStopping
 
 from data_generator import DataGenerator
-from cnn_model import ClassificationGeneratedImages
-from metrics import Metric
+from cnn_model import GeneratedImagesClassifier
+from metrics import Recall, Precision, F1Score
 from config import NUMBER_OF_CLASSES, LOGS_DIR, INPUT_SHAPE, LEARNING_RATE, EPOCHS, JSON_FILE_PATH
 
 
@@ -22,12 +22,13 @@ def train(dataset_path_json: str, save_path: str) -> None:
     train_data_gen = DataGenerator(dataset_path_json, is_train=True)
     test_data_gen = DataGenerator(dataset_path_json, is_train=False)
 
-    model = ClassificationGeneratedImages(input_shape=INPUT_SHAPE,
-                                          num_classes=NUMBER_OF_CLASSES,
-                                          regularization=0.0005
-                                          ).build()
+    model = GeneratedImagesClassifier(input_shape=INPUT_SHAPE,
+                                      num_classes=NUMBER_OF_CLASSES,
+                                      regularization=0.0005
+                                      ).build()
     model.compile(loss=tf.keras.losses.categorical_crossentropy, optimizer=tf.keras.optimizers.Adam(LEARNING_RATE),
-                  metrics=['accuracy'])
+                  metrics=[Recall(NUMBER_OF_CLASSES), Precision(NUMBER_OF_CLASSES), F1Score(NUMBER_OF_CLASSES),
+                           'accuracy'])
     model.summary()
     early = EarlyStopping(monitor='loss', min_delta=0, patience=7, verbose=1, mode='auto')
     checkpoint_filepath = os.path.join(log_dir, 'model.h5')
