@@ -1,9 +1,16 @@
 import tensorflow as tf
-from config import NUMBER_OF_CLASSES
+
+from abc import abstractmethod
 
 
 class Metric:
-    def __init__(self, num_classes: int = NUMBER_OF_CLASSES, is_binary_cross_entropy: bool = False):
+    def __init__(self, num_classes: int, is_binary_cross_entropy: bool = False) -> None:
+        """
+        Metrics are counted (Recall, Precision, F1Score).
+
+        :param num_classes: number of classes in the dataset.
+        :param is_binary_cross_entropy: If there are no more than two classes, the value is set to True.
+        """
         self.num_classes = num_classes
         self.epsilon = 1e-6
         self.is_binary_cross_entropy = is_binary_cross_entropy
@@ -13,6 +20,13 @@ class Metric:
             raise ValueError(msg)
 
     def confusion_matrix(self, y_true, y_pred):
+        """
+        This functions counts confusion_matrix.
+
+        :param y_true: This is the true mark of validation data.
+        :param y_pred: This is the predict mark of validation data.
+        :return: False Positive, False Negative, True Positive.
+        """
         if self.is_binary_cross_entropy:
             y_true = tf.cast(y_true > 0.5, tf.float32)[:, 0]
             y_pred = tf.cast(y_pred > 0.5, tf.float32)[:, 0]
@@ -25,3 +39,50 @@ class Metric:
         fn = tf.reduce_sum(matrix, axis=1) - tf.linalg.tensor_diag_part(matrix)
         tp = tf.linalg.tensor_diag_part(matrix)
         return fp, fn, tp
+
+    @abstractmethod
+    def __call__(self, y_true, y_pred):
+        raise NotImplementedError('This method must be implemented in subclasses')
+
+
+class Recall(Metric):
+    def __init__(self, num_classes, is_binary_cross_entropy=False):
+        super().__init__(num_classes, is_binary_cross_entropy)
+        self.__name__ = 'recall'
+
+    def __call__(self, y_true, y_pred):
+        fp, fn, tp = self.confusion_matrix(y_true, y_pred)
+        return tp / (tp + fn + self.epsilon)
+
+
+class Precision(Metric):
+    def __init__(self, num_classes, is_binary_cross_entropy=False):
+        super().__init__(num_classes, is_binary_cross_entropy)
+        self.__name__ = 'precision'
+
+    def __call__(self, y_true, y_pred):
+        fp, fn, tp = self.confusion_matrix(y_true, y_pred)
+        return tp / (tp + fp + self.epsilon)
+
+
+class F1Score(Metric):
+    def __init__(self, num_classes, is_binary_cross_entropy=False, beta=1):
+        super().__init__(num_classes, is_binary_cross_entropy)
+        self.beta = beta
+        self.__name__ = 'F1_score'
+
+    def __call__(self, y_true, y_pred):
+        fp, fn, tp = self.confusion_matrix(y_true, y_pred)
+        recall = tp / (tp + fn + self.epsilon)
+        precision = tp / (tp + fp + self.epsilon)
+        return (self.beta ** 2 + 1) * precision * recall / (self.beta ** 2 * precision + recall + self.epsilon)
+
+
+# class FalsePositiveRate(Metric):
+#     def __init__(self, num_classes, is_binary_cross_entropy=False):
+#         super().__init__(num_classes, is_binary_cross_entropy)
+#         self.__name__ = 'FPR'
+#
+#     def __call__(self, y_true, y_pred):
+#         fp, fn, tp = self.confusion_matrix(y_true, y_pred)
+#         return fp / (fp + tn) + self.epsilon)
