@@ -1,6 +1,5 @@
 import os
 import json
-import math
 from typing import Tuple
 
 import cv2
@@ -41,7 +40,6 @@ class DataGenerator(keras.utils.Sequence):
             self.data = self.data['test']
 
         self.data = list(self.data.items())
-        self.counter = 0
         self.on_epoch_end()
 
     def on_epoch_end(self) -> None:
@@ -91,9 +89,9 @@ class DataGenerator(keras.utils.Sequence):
         :param batch_idx: batch number.
         """
         rows_columns_subplot = self.batch_size
-        while math.sqrt(rows_columns_subplot) - int(math.sqrt(rows_columns_subplot)) != 0.0:
+        while np.math.sqrt(rows_columns_subplot) - int(np.math.sqrt(rows_columns_subplot)) != 0.0:
             rows_columns_subplot += 1
-        rows_columns_subplot = int(math.sqrt(rows_columns_subplot))
+        rows_columns_subplot = int(np.math.sqrt(rows_columns_subplot))
 
         batch = self.data[(batch_idx * self.batch_size):((batch_idx + 1) * self.batch_size)]
         plt.figure(figsize=(20, 20))
