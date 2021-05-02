@@ -11,8 +11,6 @@ JSON_FILE_PATH = os.path.join(DATASET_PATH, 'data.json')
 CLASS_NAMES = ('red', 'green', 'blue', 'gray', 'colour')
 INPUT_SHAPE = (224, 224, 3)
 NUMBER_OF_CLASSES = 5
-BATCH_SIZE = 4
+BATCH_SIZE = 32
 LEARNING_RATE = 0.0001
 EPOCHS = 20
-
-
