@@ -1,3 +1,5 @@
+from typing import Tuple
+
 import tensorflow as tf
 
 from abc import abstractmethod
@@ -19,7 +21,7 @@ class Metric:
             msg = 'There should be 2 classes with binary cross entropy, got {}.'.format(self.num_classes)
             raise ValueError(msg)
 
-    def confusion_matrix(self, y_true, y_pred):
+    def confusion_matrix(self, y_true, y_pred) -> Tuple[tf.Tensor, tf.Tensor, tf.Tensor]:
         """
         This functions counts confusion_matrix.
 
@@ -50,7 +52,7 @@ class Recall(Metric):
         super().__init__(num_classes, is_binary_cross_entropy)
         self.__name__ = 'recall'
 
-    def __call__(self, y_true, y_pred):
+    def __call__(self, y_true, y_pred) -> float:
         fp, fn, tp = self.confusion_matrix(y_true, y_pred)
         return tp / (tp + fn + self.epsilon)
 
@@ -60,7 +62,7 @@ class Precision(Metric):
         super().__init__(num_classes, is_binary_cross_entropy)
         self.__name__ = 'precision'
 
-    def __call__(self, y_true, y_pred):
+    def __call__(self, y_true, y_pred) -> float:
         fp, fn, tp = self.confusion_matrix(y_true, y_pred)
         return tp / (tp + fp + self.epsilon)
 
@@ -71,18 +73,8 @@ class F1Score(Metric):
         self.beta = beta
         self.__name__ = 'F1_score'
 
-    def __call__(self, y_true, y_pred):
+    def __call__(self, y_true, y_pred) -> float:
         fp, fn, tp = self.confusion_matrix(y_true, y_pred)
         recall = tp / (tp + fn + self.epsilon)
         precision = tp / (tp + fp + self.epsilon)
         return (self.beta ** 2 + 1) * precision * recall / (self.beta ** 2 * precision + recall + self.epsilon)
-
-
-# class FalsePositiveRate(Metric):
-#     def __init__(self, num_classes, is_binary_cross_entropy=False):
-#         super().__init__(num_classes, is_binary_cross_entropy)
-#         self.__name__ = 'FPR'
-#
-#     def __call__(self, y_true, y_pred):
-#         fp, fn, tp = self.confusion_matrix(y_true, y_pred)
-#         return fp / (fp + tn) + self.epsilon)
