@@ -3,9 +3,9 @@ import json
 from typing import Tuple
 
 import cv2
-import keras
 import numpy as np
 import matplotlib.pyplot as plt
+from tensorflow import keras
 
 from config import JSON_FILE_PATH, CLASS_NAMES, NUMBER_OF_CLASSES, BATCH_SIZE
 
