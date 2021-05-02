@@ -17,7 +17,8 @@ class GeneratedImagesClassifier:
         self.num_classes = num_classes
         self.ker_reg = None if regularization is None else tf.keras.regularizers.l2(regularization)
 
-    def custom_activation(self, x: tf.Tensor) -> tf.Tensor:
+    @staticmethod
+    def custom_activation(x: tf.Tensor) -> tf.Tensor:
         """
         This is the mish activation function.
 
