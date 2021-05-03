@@ -53,6 +53,12 @@ class Recall(Metric):
         self.__name__ = 'recall'
 
     def __call__(self, y_true, y_pred) -> float:
+        """
+
+        :param y_true: This is the true mark of validation data.
+        :param y_pred: This is the predict mark of validation data.
+        :return: recall recall metric.
+        """
         fp, fn, tp = self.confusion_matrix(y_true, y_pred)
         return tp / (tp + fn + self.epsilon)
 
@@ -63,6 +69,12 @@ class Precision(Metric):
         self.__name__ = 'precision'
 
     def __call__(self, y_true, y_pred) -> float:
+        """
+
+        :param y_true: This is the true mark of validation data.
+        :param y_pred: This is the predict mark of validation data.
+        :return: precision metric.
+        """
         fp, fn, tp = self.confusion_matrix(y_true, y_pred)
         return tp / (tp + fp + self.epsilon)
 
@@ -74,6 +86,12 @@ class F1Score(Metric):
         self.__name__ = 'F1_score'
 
     def __call__(self, y_true, y_pred) -> float:
+        """
+
+        :param y_true: This is the true mark of validation data.
+        :param y_pred: This is the predict mark of validation data.
+        :return: f1score metric.
+        """
         fp, fn, tp = self.confusion_matrix(y_true, y_pred)
         recall = tp / (tp + fn + self.epsilon)
         precision = tp / (tp + fp + self.epsilon)
