@@ -52,7 +52,7 @@ class Recall(Metric):
         super().__init__(num_classes, is_binary_cross_entropy)
         self.__name__ = 'recall'
 
-    def __call__(self, y_true, y_pred) -> float:
+    def __call__(self, y_true: tf.Tensor, y_pred: tf.Tensor) -> tf.Tensor:
         """
 
         :param y_true: This is the true mark of validation data.
@@ -68,7 +68,7 @@ class Precision(Metric):
         super().__init__(num_classes, is_binary_cross_entropy)
         self.__name__ = 'precision'
 
-    def __call__(self, y_true, y_pred) -> float:
+    def __call__(self, y_true, y_pred) -> tf.Tensor:
         """
 
         :param y_true: This is the true mark of validation data.
@@ -85,7 +85,7 @@ class F1Score(Metric):
         self.beta = beta
         self.__name__ = 'F1_score'
 
-    def __call__(self, y_true, y_pred) -> float:
+    def __call__(self, y_true, y_pred) -> tf.Tensor:
         """
 
         :param y_true: This is the true mark of validation data.
